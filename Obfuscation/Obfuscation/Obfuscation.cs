@@ -8,36 +8,36 @@
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Enter the path to the Prometheus CLI script (cli.lua):");
+            string prometheusCliPath = Console.ReadLine().Trim();
+            while (string.IsNullOrEmpty(prometheusCliPath))
+            {
+                Console.WriteLine("Input cannot be empty. Please enter a valid path to the Prometheus CLI script:");
+                prometheusCliPath = Console.ReadLine().Trim();
+            }
+
             Console.WriteLine("Enter the directory path containing .lua files:");
             string directoryPath = Console.ReadLine().Trim();
-
-            while (string.IsNullOrEmpty(directoryPath) || !Directory.Exists(directoryPath))
+            while (string.IsNullOrEmpty(directoryPath))
             {
-                if (string.IsNullOrEmpty(directoryPath))
-                    Console.WriteLine("Input cannot be empty. Please enter a valid directory path:");
-                else
-                    Console.WriteLine("Directory does not exist. Please enter a valid directory path:");
-
+                Console.WriteLine("Input cannot be empty. Please enter a valid directory path:");
                 directoryPath = Console.ReadLine().Trim();
             }
 
             Console.WriteLine("Enter the output directory path for the obfuscated files:");
             string outputDirectory = Console.ReadLine().Trim();
-
             while (string.IsNullOrEmpty(outputDirectory))
             {
                 Console.WriteLine("Output directory cannot be empty. Please enter a valid output directory path:");
                 outputDirectory = Console.ReadLine().Trim();
             }
-
             string luaInterpreterPath = @"lua";
-            string prometheusCliPath = @"C:\OBUFSCATION\Prometheus-master\cli.lua";
 
             string[] luaFiles = Directory.GetFiles(directoryPath, "*.lua");
 
             foreach (string file in luaFiles)
             {
-                string arguments = $"{prometheusCliPath} --preset Minify \"{file}\" --out {outputDirectory}\\{Path.GetFileName(file)}";
+                string arguments = $"{prometheusCliPath}\\cli.lua --preset Minify \"{file}\" --out {outputDirectory}\\{Path.GetFileName(file)}";
                 Console.WriteLine("Running command: " + luaInterpreterPath + " " + arguments);
                 ProcessStartInfo startInfo = new ProcessStartInfo(luaInterpreterPath, arguments)
                 {
